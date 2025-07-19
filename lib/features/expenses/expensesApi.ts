@@ -121,7 +121,17 @@ export const expensesApi = createApi({
       }),
       invalidatesTags: ["Expense", "Stats"],
     }),
-
+    createExpenseAi: builder.mutation<
+      Expense,
+      { userId: string; text: string }
+    >({
+      query: ({ userId, text }) => ({
+        url: `/gemini-expense/${userId}`,
+        method: "POST",
+        body: { text },
+      }),
+      invalidatesTags: ["Expense", "Stats"],
+    }),
     updateExpense: builder.mutation<Expense, UpdateExpenseRequest>({
       query: ({ id, ...updates }) => ({
         url: `/${id}`,
@@ -156,4 +166,5 @@ export const {
   useUpdateExpenseMutation,
   useDeleteExpenseMutation,
   useGetExpenseStatsQuery,
+  useCreateExpenseAiMutation,
 } = expensesApi;

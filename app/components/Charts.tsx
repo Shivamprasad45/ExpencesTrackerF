@@ -1,8 +1,12 @@
-"use client"
+"use client";
 
-import { useGetExpenseStatsQuery } from "@/lib/features/expenses/expensesApi"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { useGetExpenseStatsQuery } from "@/lib/features/expenses/expensesApi";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 import {
   Bar,
   BarChart,
@@ -16,8 +20,10 @@ import {
   CartesianGrid,
   ResponsiveContainer,
   Legend,
-} from "recharts"
-import { Loader2 } from "lucide-react"
+} from "recharts";
+import { Loader2 } from "lucide-react";
+import { selectCurrentUser } from "@/lib/features/auth/authSlice";
+import { useSelector } from "react-redux";
 
 const COLORS = [
   "hsl(var(--chart-1))",
@@ -25,10 +31,15 @@ const COLORS = [
   "hsl(var(--chart-3))",
   "hsl(var(--chart-4))",
   "hsl(var(--chart-5))",
-]
+];
 
 export function Charts() {
-  const { data: stats, isLoading, error } = useGetExpenseStatsQuery()
+  const user = useSelector(selectCurrentUser);
+  const {
+    data: stats,
+    isLoading,
+    error,
+  } = useGetExpenseStatsQuery(user?._id || "");
 
   if (isLoading) {
     return (
@@ -41,35 +52,41 @@ export function Charts() {
           </Card>
         ))}
       </div>
-    )
+    );
   }
 
   if (error || !stats) {
     return (
       <Card>
-        <CardContent className="p-6 text-center text-muted-foreground">Unable to load charts</CardContent>
+        <CardContent className="p-6 text-center text-muted-foreground">
+          Unable to load charts
+        </CardContent>
       </Card>
-    )
+    );
   }
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
-    }).format(amount)
-  }
+    }).format(amount);
+  };
 
-  const categoryData = Object.entries(stats.categoriesSpending).map(([name, value]) => ({
-    name,
-    value,
-    formattedValue: formatCurrency(value),
-  }))
+  const categoryData = Object.entries(stats.categoriesSpending).map(
+    ([name, value]) => ({
+      name,
+      value,
+      formattedValue: formatCurrency(value),
+    })
+  );
 
-  const paymentMethodData = Object.entries(stats.paymentMethodDistribution).map(([name, value]) => ({
-    name,
-    value,
-    formattedValue: formatCurrency(value),
-  }))
+  const paymentMethodData = Object.entries(stats.paymentMethodDistribution).map(
+    ([name, value]) => ({
+      name,
+      value,
+      formattedValue: formatCurrency(value),
+    })
+  );
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -105,8 +122,20 @@ export function Charts() {
                   ]}
                 />
                 <Legend />
-                <Line type="monotone" dataKey="amount" stroke="var(--color-amount)" strokeWidth={2} name="Amount" />
-                <Line type="monotone" dataKey="count" stroke="var(--color-count)" strokeWidth={2} name="Transactions" />
+                <Line
+                  type="monotone"
+                  dataKey="amount"
+                  stroke="var(--color-amount)"
+                  strokeWidth={2}
+                  name="Amount"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="count"
+                  stroke="var(--color-count)"
+                  strokeWidth={2}
+                  name="Transactions"
+                />
               </LineChart>
             </ResponsiveContainer>
           </ChartContainer>
@@ -135,18 +164,26 @@ export function Charts() {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, value }) => `${name}: ${formatCurrency(value)}`}
+                  label={({ name, value }) =>
+                    `${name}: ${formatCurrency(value)}`
+                  }
                   outerRadius={80}
                   fill="#8884d8"
                   dataKey="value"
                 >
                   {categoryData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <ChartTooltip
                   content={<ChartTooltipContent />}
-                  formatter={(value) => [formatCurrency(value as number), "Amount"]}
+                  formatter={(value) => [
+                    formatCurrency(value as number),
+                    "Amount",
+                  ]}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -172,11 +209,17 @@ export function Charts() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={paymentMethodData} layout="horizontal">
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis type="number" tickFormatter={(value) => formatCurrency(value)} />
+                <XAxis
+                  type="number"
+                  tickFormatter={(value) => formatCurrency(value)}
+                />
                 <YAxis dataKey="name" type="category" width={100} />
                 <ChartTooltip
                   content={<ChartTooltipContent />}
-                  formatter={(value) => [formatCurrency(value as number), "Amount"]}
+                  formatter={(value) => [
+                    formatCurrency(value as number),
+                    "Amount",
+                  ]}
                 />
                 <Bar dataKey="value" fill="var(--color-value)" />
               </BarChart>
@@ -203,11 +246,19 @@ export function Charts() {
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stats.topCategories}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="category" angle={-45} textAnchor="end" height={80} />
+                <XAxis
+                  dataKey="category"
+                  angle={-45}
+                  textAnchor="end"
+                  height={80}
+                />
                 <YAxis tickFormatter={(value) => formatCurrency(value)} />
                 <ChartTooltip
                   content={<ChartTooltipContent />}
-                  formatter={(value) => [formatCurrency(value as number), "Amount"]}
+                  formatter={(value) => [
+                    formatCurrency(value as number),
+                    "Amount",
+                  ]}
                 />
                 <Bar dataKey="amount" fill="var(--color-amount)" />
               </BarChart>
@@ -216,5 +267,5 @@ export function Charts() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

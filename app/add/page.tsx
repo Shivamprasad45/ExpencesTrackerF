@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "@/lib/features/auth/authSlice";
+import VoiceExpense from "./vioceAdd";
 
 export default function AddExpense() {
   const user = useSelector(selectCurrentUser);
@@ -41,6 +42,7 @@ export default function AddExpense() {
         onCancel={() => router.push("/")}
         isLoading={isLoading}
       />
+      <VoiceExpense />
     </div>
   );
 }
