@@ -101,7 +101,7 @@ export function ExpenseCard({
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => onDelete(expense._id)}
+                onClick={() => onDelete(expense._id || "")}
                 className="text-red-500 hover:text-red-700"
               >
                 <Trash2 className="h-4 w-4" />

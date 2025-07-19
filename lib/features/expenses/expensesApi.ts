@@ -1,7 +1,7 @@
 // import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export interface Expense {
-  _id: string; // For compatibility with existing code
+  _id?: string; // For compatibility with existing code
   title: string;
   description: string;
   amount: number;

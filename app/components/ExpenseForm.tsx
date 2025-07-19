@@ -1,24 +1,34 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import type { CreateExpenseRequest, UpdateExpenseRequest, Expense } from "@/lib/features/expenses/expensesApi"
-import { X, Plus, DollarSign } from "lucide-react"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import type {
+  CreateExpenseRequest,
+  UpdateExpenseRequest,
+  Expense,
+} from "@/lib/features/expenses/expensesApi";
+import { X, Plus, DollarSign } from "lucide-react";
 
 interface ExpenseFormProps {
-  expense?: Expense
-  onSubmit: (data: CreateExpenseRequest | UpdateExpenseRequest) => void
-  onCancel?: () => void
-  isLoading?: boolean
+  expense?: Expense;
+  onSubmit: (data: CreateExpenseRequest | UpdateExpenseRequest) => void;
+  onCancel?: () => void;
+  isLoading?: boolean;
 }
 
 const categories = [
@@ -33,13 +43,31 @@ const categories = [
   "Bills & Payments",
   "Insurance",
   "Other",
-]
+];
 
-const paymentMethods = ["Credit Card", "Debit Card", "Cash", "Bank Transfer", "Digital Wallet", "Check"]
+const paymentMethods = [
+  "Credit Card",
+  "Debit Card",
+  "Cash",
+  "Bank Transfer",
+  "Digital Wallet",
+  "Check",
+];
 
-const recurringFrequencies = ["daily", "weekly", "monthly", "quarterly", "yearly"]
+const recurringFrequencies = [
+  "daily",
+  "weekly",
+  "monthly",
+  "quarterly",
+  "yearly",
+];
 
-export function ExpenseForm({ expense, onSubmit, onCancel, isLoading = false }: ExpenseFormProps) {
+export function ExpenseForm({
+  expense,
+  onSubmit,
+  onCancel,
+  isLoading = false,
+}: ExpenseFormProps) {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -49,10 +77,10 @@ export function ExpenseForm({ expense, onSubmit, onCancel, isLoading = false }: 
     paymentMethod: "",
     isRecurring: false,
     recurringFrequency: "",
-  })
+  });
 
-  const [tags, setTags] = useState<string[]>([])
-  const [tagInput, setTagInput] = useState("")
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState("");
 
   useEffect(() => {
     if (expense) {
@@ -65,45 +93,49 @@ export function ExpenseForm({ expense, onSubmit, onCancel, isLoading = false }: 
         paymentMethod: expense.paymentMethod,
         isRecurring: expense.isRecurring,
         recurringFrequency: expense.recurringFrequency || "",
-      })
-      setTags(expense.tags)
+      });
+      setTags(expense.tags);
     }
-  }, [expense])
+  }, [expense]);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const submitData = {
       ...formData,
       amount: Number.parseFloat(formData.amount),
       tags,
-      recurringFrequency: formData.isRecurring ? formData.recurringFrequency : undefined,
-    }
+      recurringFrequency: formData.isRecurring
+        ? formData.recurringFrequency
+        : undefined,
+    };
 
     if (expense) {
-      onSubmit({ id: expense.id, ...submitData })
+      // Update mode: include the id
+      onSubmit({ id: expense._id || "", ...submitData });
     } else {
-      onSubmit(submitData)
+      // Create mode: just submit the data
+      console.log();
     }
-  }
+  };
 
   const addTag = () => {
     if (tagInput.trim() && !tags.includes(tagInput.trim())) {
-      setTags([...tags, tagInput.trim()])
-      setTagInput("")
+      setTags([...tags, tagInput.trim()]);
+      setTagInput("");
     }
-  }
+  };
 
   const removeTag = (tagToRemove: string) => {
-    setTags(tags.filter((tag) => tag !== tagToRemove))
-  }
+    setTags(tags.filter((tag) => tag !== tagToRemove));
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
-      e.preventDefault()
-      addTag()
+      e.preventDefault();
+      addTag();
     }
-  }
+  };
 
   return (
     <Card className="w-full max-w-2xl mx-auto">
@@ -121,7 +153,9 @@ export function ExpenseForm({ expense, onSubmit, onCancel, isLoading = false }: 
               <Input
                 id="title"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
                 placeholder="What did you spend on?"
                 required
               />
@@ -137,7 +171,9 @@ export function ExpenseForm({ expense, onSubmit, onCancel, isLoading = false }: 
                   step="0.01"
                   min="0"
                   value={formData.amount}
-                  onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, amount: e.target.value })
+                  }
                   placeholder="0.00"
                   className="pl-10"
                   required
@@ -151,7 +187,9 @@ export function ExpenseForm({ expense, onSubmit, onCancel, isLoading = false }: 
             <Textarea
               id="description"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, description: e.target.value })
+              }
               placeholder="Additional details about this expense..."
               rows={3}
             />
@@ -162,7 +200,9 @@ export function ExpenseForm({ expense, onSubmit, onCancel, isLoading = false }: 
               <Label htmlFor="category">Category *</Label>
               <Select
                 value={formData.category}
-                onValueChange={(value) => setFormData({ ...formData, category: value })}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, category: value })
+                }
                 required
               >
                 <SelectTrigger>
@@ -182,7 +222,9 @@ export function ExpenseForm({ expense, onSubmit, onCancel, isLoading = false }: 
               <Label htmlFor="paymentMethod">Payment Method *</Label>
               <Select
                 value={formData.paymentMethod}
-                onValueChange={(value) => setFormData({ ...formData, paymentMethod: value })}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, paymentMethod: value })
+                }
                 required
               >
                 <SelectTrigger>
@@ -205,7 +247,9 @@ export function ExpenseForm({ expense, onSubmit, onCancel, isLoading = false }: 
               id="date"
               type="date"
               value={formData.date}
-              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, date: e.target.value })
+              }
               required
             />
           </div>
@@ -219,7 +263,9 @@ export function ExpenseForm({ expense, onSubmit, onCancel, isLoading = false }: 
                   setFormData({
                     ...formData,
                     isRecurring: checked as boolean,
-                    recurringFrequency: checked ? formData.recurringFrequency : "",
+                    recurringFrequency: checked
+                      ? formData.recurringFrequency
+                      : "",
                   })
                 }
               />
@@ -231,7 +277,9 @@ export function ExpenseForm({ expense, onSubmit, onCancel, isLoading = false }: 
                 <Label htmlFor="recurringFrequency">Frequency *</Label>
                 <Select
                   value={formData.recurringFrequency}
-                  onValueChange={(value) => setFormData({ ...formData, recurringFrequency: value })}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, recurringFrequency: value })
+                  }
                   required={formData.isRecurring}
                 >
                   <SelectTrigger>
@@ -266,9 +314,17 @@ export function ExpenseForm({ expense, onSubmit, onCancel, isLoading = false }: 
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
                 {tags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="flex items-center gap-1">
+                  <Badge
+                    key={tag}
+                    variant="secondary"
+                    className="flex items-center gap-1"
+                  >
                     {tag}
-                    <button type="button" onClick={() => removeTag(tag)} className="ml-1 hover:text-red-500">
+                    <button
+                      type="button"
+                      onClick={() => removeTag(tag)}
+                      className="ml-1 hover:text-red-500"
+                    >
                       <X className="h-3 w-3" />
                     </button>
                   </Badge>
@@ -279,7 +335,11 @@ export function ExpenseForm({ expense, onSubmit, onCancel, isLoading = false }: 
 
           <div className="flex gap-4 pt-4">
             <Button type="submit" disabled={isLoading} className="flex-1">
-              {isLoading ? "Saving..." : expense ? "Update Expense" : "Add Expense"}
+              {isLoading
+                ? "Saving..."
+                : expense
+                ? "Update Expense"
+                : "Add Expense"}
             </Button>
             {onCancel && (
               <Button type="button" variant="outline" onClick={onCancel}>
@@ -290,5 +350,5 @@ export function ExpenseForm({ expense, onSubmit, onCancel, isLoading = false }: 
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }
