@@ -19,9 +19,14 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       const response = await login({ email, password }).unwrap();
+      console.log("Login successful:", response);
+      localStorage.setItem("authToken", response.token);
       sessionStorage.setItem("userSession", JSON.stringify(response));
-
-      router.push("/");
+      // ✅ Save token as a cookie (visible to middleware)
+      document.cookie = `token=${response.token}; path=/; max-age=86400`;
+      // expires in 1 day
+      document.cookie = `premium=${response.isPremium}; path=/; max-age=86400`;
+      window.location.reload();
     } catch (err) {
       console.error("Login failed:", err);
     }

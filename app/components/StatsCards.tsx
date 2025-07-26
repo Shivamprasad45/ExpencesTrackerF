@@ -21,7 +21,7 @@ export function StatsCards() {
     isLoading,
     error,
   } = useGetExpenseStatsQuery(user?._id || "");
-  console.log(stats, " Stats Data");
+
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

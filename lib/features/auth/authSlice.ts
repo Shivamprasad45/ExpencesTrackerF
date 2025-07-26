@@ -14,7 +14,7 @@ const initialState: AuthState =
   typeof window !== "undefined" && sessionStorage.getItem("userSession")
     ? JSON.parse(sessionStorage.getItem("userSession")!)
     : null;
-console.log(initialState, "Sxsd");
+console.log(initialState);
 const authSlice = createSlice({
   name: "auth",
   initialState,

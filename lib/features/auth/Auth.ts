@@ -22,12 +22,13 @@ export interface AuthResponse {
   name: string;
   email: string;
   token: string;
+  isPremium?: boolean; // Optional, only if user has premium status
 }
 
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/auth/",
+    baseUrl: "http://13.203.138.162:5000/api/auth/",
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("authToken");
       if (token) {

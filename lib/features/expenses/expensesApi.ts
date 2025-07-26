@@ -79,10 +79,10 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const expensesApi = createApi({
   reducerPath: "expensesApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000/api/expenses", // Update with your backend URL
+    baseUrl: "http://13.203.138.162:5000/api/expenses", // Update with your backend URL
     prepareHeaders: (headers) => {
       // Add JWT token to requests
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("authToken");
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }

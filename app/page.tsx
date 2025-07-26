@@ -25,17 +25,13 @@ export default function Dashboard() {
   );
 
   const router = useRouter();
-  useEffect(() => {
-    const login = localStorage.getItem("authToken");
-    if (!login) {
-      router.push("/login");
-    }
-  }, []);
 
-  console.log(user);
+  if (user?.email === null || user?.email === undefined) {
+    router.push("/login");
+  }
 
   const recentExpenses = expenses?.slice(0, 3) || [];
-  console.log(recentExpenses, " Recent Expenses");
+
   return (
     <div className="space-y-8">
       {/* Header */}
