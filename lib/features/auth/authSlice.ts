@@ -6,6 +6,7 @@ interface AuthData {
   name: string;
   email: string;
   token: string;
+  isPremium?: boolean; // Optional, only if user has premium status
 }
 
 type AuthState = AuthData | null;

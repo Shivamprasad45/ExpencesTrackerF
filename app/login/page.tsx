@@ -1,6 +1,6 @@
 "use client";
 // pages/login.tsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 // import { useLoginMutation } from '@/features/api/authApi';
 
 import Link from "next/link";
@@ -32,9 +32,11 @@ export default function LoginPage() {
     }
   };
   const user = useSelector(selectCurrentUser);
-  if (user) {
-    router.push("/");
-  }
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user, router]);
 
   return (
     <div

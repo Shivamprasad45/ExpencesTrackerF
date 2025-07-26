@@ -25,10 +25,11 @@ export default function Dashboard() {
   );
 
   const router = useRouter();
-
-  if (user?.email === null || user?.email === undefined) {
-    router.push("/login");
-  }
+  useEffect(() => {
+    if (!user) {
+      router.push("/login");
+    }
+  }, [user, router]);
 
   const recentExpenses = expenses?.slice(0, 3) || [];
 
