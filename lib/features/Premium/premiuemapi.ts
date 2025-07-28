@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const expensesPremiumApi = createApi({
   reducerPath: "expensesPremiumApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://13.203.138.162:5000/api/Premium",
+    baseUrl: "http://13.203.138.162/api/Premium",
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("authToken");
       if (token) {
