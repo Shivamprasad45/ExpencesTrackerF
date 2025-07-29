@@ -83,11 +83,14 @@ const Pricing = () => {
       }
 
       // Create order on backend
-      const response = await axios.post(`${url}/api/payment/create-order`, {
-        userId: user._id,
-        amount: 29900, // in paise (299 * 100)
-        currency: "INR",
-      });
+      const response = await axios.post(
+        `https://exp-five-mu.vercel.app/api/payment/create-order`,
+        {
+          userId: user._id,
+          amount: 29900, // in paise (299 * 100)
+          currency: "INR",
+        }
+      );
 
       const { order } = response.data;
 
@@ -105,12 +108,15 @@ const Pricing = () => {
           order_id: order.id,
           handler: async function (response: any) {
             // Verify payment on backend
-            await axios.post(`${url}/api/payment/verify`, {
-              razorpayPaymentId: response.razorpay_payment_id,
-              razorpayOrderId: response.razorpay_order_id,
-              razorpaySignature: response.razorpay_signature,
-              userId: user._id,
-            });
+            await axios.post(
+              `https://exp-five-mu.vercel.app/api/payment/verify`,
+              {
+                razorpayPaymentId: response.razorpay_payment_id,
+                razorpayOrderId: response.razorpay_order_id,
+                razorpaySignature: response.razorpay_signature,
+                userId: user._id,
+              }
+            );
 
             alert("Payment successful! Your premium account is now active.");
           },
