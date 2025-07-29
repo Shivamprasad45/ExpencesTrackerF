@@ -14,6 +14,15 @@ export interface Expense {
   createdAt: string;
   updatedAt: string;
 }
+interface GetExpenseResponse {
+  expenses: Expense[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    itemsPerPage: number;
+    totalItems: number;
+  };
+}
 
 export interface CreateExpenseRequest {
   userId: string;
@@ -79,7 +88,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const expensesApi = createApi({
   reducerPath: "expensesApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `http://13.203.138.162/api/expenses`, // Update with your backend URL
+    baseUrl: `https://exp-five-mu.vercel.app/api/expenses`, // Update with your backend URL
     prepareHeaders: (headers) => {
       // Add JWT token to requests
       const token = localStorage.getItem("authToken");
@@ -106,9 +115,15 @@ export const expensesApi = createApi({
       providesTags: ["Expense"],
     }),
 
-    getExpense: builder.query<Expense[], string>({
-      query: (userId) => `/Users/${userId}`,
-      providesTags: (result, error, userId) => [
+    getExpense: builder.query<
+      GetExpenseResponse,
+      { userId: string; page: number; limit: number }
+    >({
+      query: ({ userId, page, limit }) => ({
+        url: `/Users/${userId}`,
+        params: { page, limit },
+      }),
+      providesTags: (result, error, { userId }) => [
         { type: "Expense", id: userId },
       ],
     }),

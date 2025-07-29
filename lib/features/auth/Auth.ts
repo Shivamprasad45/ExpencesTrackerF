@@ -28,7 +28,7 @@ export interface AuthResponse {
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `https://13.203.138.162/api/auth/`,
+    baseUrl: `https://exp-five-mu.vercel.app/api/auth/`,
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("authToken");
       if (token) {
