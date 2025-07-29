@@ -21,30 +21,17 @@ interface LeaderboardUser {
 const getRankIcon = (rank: number) => {
   switch (rank) {
     case 1:
-      return <Crown className="w-6 h-6 text-yellow-500" />;
+      return <Crown className="w-5 h-5 text-amber-600" />;
     case 2:
-      return <Medal className="w-6 h-6 text-gray-400" />;
+      return <Medal className="w-5 h-5 text-slate-500" />;
     case 3:
-      return <Medal className="w-6 h-6 text-amber-600" />;
+      return <Medal className="w-5 h-5 text-orange-600" />;
     default:
       return (
-        <span className="w-6 h-6 flex items-center justify-center text-sm font-bold text-gray-500">
-          #{rank}
+        <span className="w-5 h-5 flex items-center justify-center text-xs font-semibold text-gray-600 bg-gray-100 rounded-full">
+          {rank}
         </span>
       );
-  }
-};
-
-const getRankStyles = (rank: number) => {
-  switch (rank) {
-    case 1:
-      return "bg-gradient-to-r from-yellow-50 to-amber-50 border-yellow-200 shadow-lg transform scale-105";
-    case 2:
-      return "bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200 shadow-md";
-    case 3:
-      return "bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200 shadow-md";
-    default:
-      return "bg-white border-gray-200 hover:shadow-md hover:border-gray-300";
   }
 };
 
@@ -62,11 +49,11 @@ export default function LeaderboardPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+      <div className="min-h-screen bg-gray-50 p-8">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading leaderboard...</p>
+          <div className="text-center py-16">
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-300 border-t-blue-600 mx-auto"></div>
+            <p className="mt-4 text-gray-500">Loading leaderboard...</p>
           </div>
         </div>
       </div>
@@ -75,14 +62,14 @@ export default function LeaderboardPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+      <div className="min-h-screen bg-gray-50 p-8">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center py-12">
-            <div className="bg-red-50 border border-red-200 rounded-lg p-6">
-              <p className="text-red-600 font-medium">
+          <div className="text-center py-16">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
+              <p className="text-red-700 font-medium">
                 Failed to load leaderboard
               </p>
-              <p className="text-red-500 text-sm mt-2">
+              <p className="text-red-600 text-sm mt-1">
                 Please try again later
               </p>
             </div>
@@ -94,15 +81,15 @@ export default function LeaderboardPage() {
 
   if (!data || data.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+      <div className="min-h-screen bg-gray-50 p-8">
         <div className="max-w-4xl mx-auto">
-          <div className="text-center py-12">
-            <Trophy className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold text-gray-600 mb-2">
-              No Data Yet
+          <div className="text-center py-16">
+            <Trophy className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-gray-600 mb-2">
+              No Data Available
             </h2>
             <p className="text-gray-500">
-              Start tracking expenses to see the leaderboard!
+              Start tracking expenses to see the leaderboard
             </p>
           </div>
         </div>
@@ -118,165 +105,142 @@ export default function LeaderboardPage() {
   const totalAmountSum = data.reduce((sum, user) => sum + user.totalAmount, 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+    <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Trophy className="w-8 h-8 text-yellow-500" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Expense Leaderboard
-            </h1>
-            <Trophy className="w-8 h-8 text-yellow-500" />
-          </div>
-          <p className="text-gray-600 text-lg">
-            Who&apos;s spending the most? 💸
+        <div className="text-center mb-12">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Expense Leaderboard
+          </h1>
+          <p className="text-gray-600">
+            Track and compare spending across users
           </p>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-green-100 rounded-lg">
-                <DollarSign className="w-6 h-6 text-green-600" />
-              </div>
+        {/* Summary Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+            <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total Spent</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Total Amount
+                </p>
                 <p className="text-2xl font-bold text-gray-900">
                   {formatCurrency(totalAmountSum)}
                 </p>
               </div>
+              <DollarSign className="w-8 h-8 text-green-600" />
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-blue-100 rounded-lg">
-                <Target className="w-6 h-6 text-blue-600" />
-              </div>
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+            <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total Expenses</p>
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Total Expenses
+                </p>
                 <p className="text-2xl font-bold text-gray-900">
                   {totalExpensesSum.toLocaleString()}
                 </p>
               </div>
+              <Target className="w-8 h-8 text-blue-600" />
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-purple-100 rounded-lg">
-                <TrendingUp className="w-6 h-6 text-purple-600" />
-              </div>
+          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+            <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Top Spender</p>
-                <p className="text-lg font-bold text-gray-900 truncate">
+                <p className="text-sm font-medium text-gray-600 mb-1">
+                  Top Spender
+                </p>
+                <p className="text-xl font-bold text-gray-900 truncate">
                   {topSpender.name}
                 </p>
               </div>
+              <TrendingUp className="w-8 h-8 text-purple-600" />
             </div>
           </div>
         </div>
 
-        {/* Leaderboard */}
-        <div className="bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6">
-            <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-              <Trophy className="w-6 h-6" />
+        {/* Leaderboard Table */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          {/* Table Header */}
+          <div className="bg-gray-50 border-b border-gray-200 px-6 py-4">
+            <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              <Trophy className="w-5 h-5 text-amber-600" />
               Rankings
             </h2>
           </div>
 
-          <div className="p-6">
-            <div className="space-y-4">
-              {data.map((user: LeaderboardUser, index: number) => {
-                const rank = index + 1;
-                const percentage = (user.totalAmount / totalAmountSum) * 100;
+          {/* Table Content */}
+          <div className="divide-y divide-gray-200">
+            {data.map((user: LeaderboardUser, index: number) => {
+              const rank = index + 1;
+              const percentage = (user.totalAmount / totalAmountSum) * 100;
 
-                return (
-                  <div
-                    key={user.userId}
-                    className={`
-                      relative p-6 rounded-xl border-2 transition-all duration-300
-                      ${getRankStyles(rank)}
-                    `}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-3">
-                          {getRankIcon(rank)}
-                          <div>
-                            <h3 className="font-bold text-lg text-gray-900">
-                              {user.name}
-                            </h3>
-                            <p className="text-sm text-gray-600">
-                              {user.email}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="text-right">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-2xl font-bold text-gray-900">
-                            {formatCurrency(user.totalAmount)}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-4 text-sm text-gray-600">
-                          <span>{user.totalExpenses} expenses</span>
-                          <span>{percentage.toFixed(1)}% of total</span>
+              return (
+                <div
+                  key={user.userId}
+                  className={`px-6 py-4 hover:bg-gray-50 transition-colors ${
+                    rank <= 3 ? "bg-blue-50" : ""
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    {/* Left side - Rank and User Info */}
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-3 min-w-0">
+                        {getRankIcon(rank)}
+                        <div className="min-w-0">
+                          <h3 className="font-semibold text-gray-900 truncate">
+                            {user.name}
+                          </h3>
+                          <p className="text-sm text-gray-500 truncate">
+                            {user.email}
+                          </p>
                         </div>
                       </div>
                     </div>
 
-                    {/* Progress bar */}
-                    <div className="mt-4">
-                      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div
-                          className={`h-full transition-all duration-1000 ${
-                            rank === 1
-                              ? "bg-gradient-to-r from-yellow-400 to-yellow-600"
-                              : rank === 2
-                              ? "bg-gradient-to-r from-gray-400 to-gray-600"
-                              : rank === 3
-                              ? "bg-gradient-to-r from-orange-400 to-orange-600"
-                              : "bg-gradient-to-r from-blue-400 to-blue-600"
-                          }`}
-                          style={{ width: `${percentage}%` }}
-                        />
+                    {/* Right side - Stats */}
+                    <div className="text-right flex-shrink-0">
+                      <p className="text-xl font-bold text-gray-900">
+                        {formatCurrency(user.totalAmount)}
+                      </p>
+                      <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
+                        <span>{user.totalExpenses} expenses</span>
+                        <span>•</span>
+                        <span>{percentage.toFixed(1)}%</span>
                       </div>
                     </div>
-
-                    {/* Rank badge for top 3 */}
-                    {rank <= 3 && (
-                      <div
-                        className={`
-                        absolute -top-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm
-                        ${
-                          rank === 1
-                            ? "bg-yellow-500"
-                            : rank === 2
-                            ? "bg-gray-500"
-                            : "bg-orange-500"
-                        }
-                      `}
-                      >
-                        {rank}
-                      </div>
-                    )}
                   </div>
-                );
-              })}
-            </div>
+
+                  {/* Progress Bar */}
+                  <div className="mt-3">
+                    <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full transition-all duration-700 ${
+                          rank === 1
+                            ? "bg-amber-500"
+                            : rank === 2
+                            ? "bg-slate-400"
+                            : rank === 3
+                            ? "bg-orange-500"
+                            : "bg-blue-500"
+                        }`}
+                        style={{ width: `${percentage}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-8 p-4 bg-white rounded-lg shadow-sm border border-gray-200">
-          <p className="text-gray-600 text-sm">
-            💡 <strong>Tip:</strong> Track your expenses regularly to climb the
-            leaderboard!
+        <div className="text-center mt-8">
+          <p className="text-sm text-gray-500">
+            Track your expenses regularly to improve your ranking
           </p>
         </div>
       </div>

@@ -110,13 +110,7 @@ export function ExpenseForm({
         : undefined,
     };
 
-    if (expense) {
-      // Update mode: include the id
-      onSubmit({ id: expense._id || "", ...submitData });
-    } else {
-      // Create mode: just submit the data
-      console.log();
-    }
+    onSubmit({ id: expense ? expense._id ?? "" : "", ...submitData });
   };
 
   const addTag = () => {

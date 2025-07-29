@@ -16,70 +16,101 @@ const Page = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto mt-8 p-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl border border-gray-100">
-      <div className="flex flex-col items-center mb-8">
-        <div className="relative mb-6">
-          <div className="w-24 h-24 rounded-full bg-gradient-to-r from-blue-400 to-indigo-600 flex items-center justify-center shadow-lg">
-            <span className="text-3xl font-bold text-white">
-              {getInitials(user?.name)}
-            </span>
-          </div>
-
-          {user?.isPremium && (
-            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-yellow-400 to-yellow-500 px-3 py-1 rounded-full shadow-md">
-              <div className="flex items-center">
-                <CrownIcon className="w-4 h-4 text-white mr-1" />
-                <span className="text-xs font-bold text-white tracking-wide">
-                  PREMIUM
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-2xl mx-auto">
+        {/* Profile Header */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-6">
+          <div className="flex items-center space-x-6">
+            {/* Avatar */}
+            <div className="relative">
+              <div className="w-20 h-20 rounded-full bg-blue-600 flex items-center justify-center">
+                <span className="text-2xl font-semibold text-white">
+                  {getInitials(user?.name)}
                 </span>
               </div>
+              {user?.isPremium && (
+                <div className="absolute -bottom-1 -right-1 bg-amber-500 rounded-full p-1">
+                  <CrownIcon className="w-3 h-3 text-white" />
+                </div>
+              )}
             </div>
-          )}
+
+            {/* User Info */}
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-2">
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {user?.name}
+                </h1>
+                {user?.isPremium && (
+                  <span className="bg-amber-100 text-amber-800 text-xs font-medium px-2 py-1 rounded-full">
+                    Premium
+                  </span>
+                )}
+              </div>
+              <p className="text-gray-600 flex items-center">
+                <EnvelopeIcon className="w-4 h-4 mr-2" />
+                {user?.email}
+              </p>
+            </div>
+          </div>
         </div>
 
-        <h1 className="text-3xl font-bold text-gray-800 mb-1">{user?.name}</h1>
-        <p className="text-gray-500 flex items-center">
-          <EnvelopeIcon className="w-4 h-4 mr-2" />
-          {user?.email}
-        </p>
-      </div>
+        {/* Account Information */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-6 flex items-center">
+            <UserCircleIcon className="w-5 h-5 mr-2" />
+            Account Information
+          </h2>
 
-      <div className="bg-gray-50 rounded-xl p-6 mb-6 border border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-700 mb-4 flex items-center">
-          <UserCircleIcon className="w-5 h-5 mr-2 text-indigo-500" />
-          Account Details
-        </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <InfoItem
+              label="Account Status"
+              value={user?.isPremium ? "Premium Member" : "Free Account"}
+              icon={<BadgeCheckIcon className="w-5 h-5 text-green-600" />}
+            />
 
-        <div className="space-y-4">
-          <InfoItem
-            label="Account Status"
-            value={user?.isPremium ? "Active Premium" : "Free Account"}
-            icon={<BadgeCheckIcon className="w-5 h-5 text-green-500" />}
-          />
+            <InfoItem
+              label="Member Since"
+              value="January 15, 2023"
+              icon={<CalendarIcon className="w-5 h-5 text-blue-600" />}
+            />
 
-          <InfoItem
-            label="Member Since"
-            value="Jan 15, 2023"
-            icon={<CalendarIcon className="w-5 h-5 text-blue-500" />}
-          />
+            <InfoItem
+              label="Subscription Plan"
+              value={user?.isPremium ? "Annual Plan" : "Basic Plan"}
+              icon={<CreditCardIcon className="w-5 h-5 text-purple-600" />}
+            />
 
-          <InfoItem
-            label="Subscription"
-            value={user?.isPremium ? "Annual (renews Dec 2023)" : "Basic"}
-            icon={<CreditCardIcon className="w-5 h-5 text-purple-500" />}
-          />
+            <InfoItem
+              label="Next Billing"
+              value={user?.isPremium ? "December 15, 2023" : "N/A"}
+              icon={<CalendarIcon className="w-5 h-5 text-orange-600" />}
+            />
+          </div>
         </div>
-      </div>
 
-      <div className="flex space-x-4">
-        <button className="flex-1 py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium transition duration-200 shadow hover:shadow-md transform hover:-translate-y-0.5">
-          Edit Profile
-        </button>
-        {!user?.isPremium && (
-          <button className="flex-1 py-3 px-4 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white rounded-xl font-medium transition duration-200 shadow hover:shadow-md">
-            Upgrade to Premium
-          </button>
-        )}
+        {/* Action Buttons */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+          <h2 className="text-lg font-semibold text-gray-900 mb-6">
+            Account Actions
+          </h2>
+
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button className="flex-1 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors duration-200">
+              Edit Profile
+            </button>
+
+            {!user?.isPremium && (
+              <button className="flex-1 px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-medium transition-colors duration-200">
+                Upgrade to Premium
+              </button>
+            )}
+
+            <button className="flex-1 px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors duration-200">
+              Account Settings
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -91,16 +122,16 @@ const InfoItem: React.FC<{
   label: string;
   value: string;
 }> = ({ icon, label, value }) => (
-  <div className="flex items-center">
-    <div className="bg-white p-2 rounded-lg shadow-sm mr-3">{icon}</div>
-    <div className="flex-1">
-      <p className="text-xs text-gray-500">{label}</p>
-      <p className="font-medium text-gray-800">{value}</p>
+  <div className="flex items-start space-x-3">
+    <div className="flex-shrink-0 mt-1">{icon}</div>
+    <div className="min-w-0 flex-1">
+      <p className="text-sm font-medium text-gray-500 mb-1">{label}</p>
+      <p className="text-sm text-gray-900 font-medium">{value}</p>
     </div>
   </div>
 );
 
-// SVG Icons (remain unchanged)
+// SVG Icons
 const CrownIcon: React.FC<{ className?: string }> = ({ className }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

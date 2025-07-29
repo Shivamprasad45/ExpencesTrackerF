@@ -220,7 +220,7 @@ const Pricing = () => {
 
                 <button
                   onClick={plan.popular ? initiatePayment : () => {}}
-                  disabled={loading}
+                  disabled={loading || user?.isPremium}
                   className={`w-full py-3 px-6 rounded-lg font-semibold transition-all duration-300 ${
                     plan.popular
                       ? "bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 text-white shadow-lg hover:shadow-xl"
